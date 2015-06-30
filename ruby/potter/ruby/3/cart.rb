@@ -1,20 +1,35 @@
 class Cart
-  attr_accessor :cart, :base_price
+  attr_accessor :cart, :base_price, :result
 
   def initialize(cart)
     @cart = cart || []
     @base_price = 8
+    @@result = 0
   end
 
   def price
     return 0 if cart.empty?
-    result = 0
+    carts_hash = Hash.new(0)
+    cart.each do |k|
+      carts_hash[k] += 1
+    end
+    begin 
+      single_carts = carts_hash.map do |k, v|
+        if v >= 1
+          carts_hash[k] -= 1
+          k
+        end
+      end
+      single_carts.delete(nil)
+      array_calculator(single_carts)
+    end while carts_hash.detect { |k, v| v >= 1 }
+    @@result
+  end
 
-    cart_discount = cart.uniq.size
-    cart_without_discount = cart.size - cart_discount
-
-    result += cart_discount * base_price * price_calculator(cart_discount)
-    result += cart_without_discount * base_price
+  def array_calculator(array)
+    cart_discount = array.uniq.size
+    @@result += cart_discount * base_price * price_calculator(cart_discount)
+    @@result
   end
 
   def price_calculator(carts)
@@ -31,18 +46,3 @@ class Cart
     end
   end
 end
-   #
-#   uniq_cart = cart.uniq
-#   puts "uniq #{uniq_cart}"
-#   puts "cart #{cart}"
-#
-#   if uniq_cart == cart
-#
-#     if uniq_cart.size.eql?(2)
-#       base_price * uniq_cart.size * 0.95
-#     end
-#   else
-#     cart.size * base_price
-#   end
-#
-#  end

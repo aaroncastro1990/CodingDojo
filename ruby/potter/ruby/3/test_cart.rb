@@ -22,4 +22,21 @@ class TestPrice < Test::Unit::TestCase
     assert_equal(8 * 5 * 0.75, Cart.new([0, 1, 2, 3, 4]).price)
   end
 
+  def testSeveralDiscounts
+    assert_equal(8 + (8 * 2 * 0.95), Cart.new([0, 0, 1]).price)
+    assert_equal(2 * (8 * 2 * 0.95), Cart.new([0, 0, 1, 1]).price)
+    assert_equal((8 * 4 * 0.8) + (8 * 2 * 0.95), Cart.new([0, 0, 1, 2, 2, 3]).price)
+    assert_equal(8 + (8 * 5 * 0.75), Cart.new([0, 1, 1, 2, 3, 4]).price)
+  end
+
+  def testEdgeCases
+    #assert_equal(2 * (8 * 4 * 0.8), Cart.new([0, 0, 1, 1, 2, 2, 3, 4]).price)
+    #assert_equal(3 * (8 * 5 * 0.75) + 2 * (8 * 4 * 0.8),
+    #  Cart.new([0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4]).price)
+  end
+
+  def givenExampleTest
+    assert_equal(52.20, Cart.new([0, 0, 1, 1, 2, 2, 3, 4]).price)
+  end
+
 end
