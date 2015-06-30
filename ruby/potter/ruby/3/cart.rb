@@ -29,7 +29,6 @@ class Cart
   def array_calculator(array)
     cart_discount = array.uniq.size
     @@result += cart_discount * base_price * price_calculator(cart_discount)
-    @@result
   end
 
   def price_calculator(carts)
