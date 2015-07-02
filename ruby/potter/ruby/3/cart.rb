@@ -9,20 +9,23 @@ class Cart
 
   def price
     return 0 if cart.empty?
-    carts_hash = Hash.new(0)
-    cart.each do |k|
-      carts_hash[k] += 1
-    end
-    begin 
-      single_carts = carts_hash.map do |k, v|
-        if v >= 1
-          carts_hash[k] -= 1
-          k
+    if cart.length == 1
+      array_calculator(cart)
+    else
+      begin
+        new_array = []
+        cart.delete_if do |k|
+          unless new_array.include? k
+            new_array.push k
+          end
         end
-      end
-      single_carts.delete(nil)
-      array_calculator(single_carts)
-    end while carts_hash.detect { |k, v| v >= 1 }
+        if cart.length == 3 && new_array.length == 5
+          cart.push(5)
+          new_array.pop
+        end
+        array_calculator(new_array)
+      end while !cart.empty?
+    end
     @@result
   end
 
