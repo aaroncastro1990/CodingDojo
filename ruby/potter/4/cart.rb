@@ -9,17 +9,11 @@ class Cart
 
   def price
     return 0 if cart.empty?
-    if cart.size.eql?(1)
-      return base_price
-    end
+    return base_price if cart.size.eql?(1)
     begin
       new_array = []
-      cart.delete_if do |k|
-        !new_array.include?(k) ? new_array.push(k) : false
-      end
-      if cart.size.eql?(3) && new_array.size.eql?(5)
-        cart.push(new_array.pop)
-      end
+      cart.delete_if { |k| !new_array.include?(k) ? new_array.push(k) : false }
+      cart.push(new_array.pop) if cart.size.eql?(3) && new_array.size.eql?(5)
       total_cost_calculator(new_array.uniq.size)
     end while !cart.empty?
     @@result
